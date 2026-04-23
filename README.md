@@ -192,6 +192,7 @@ auris/
 - [ ] **Save states** — full snapshot of the machine state at any time
 - [ ] **Multiple save state slots** — slots 1–9 with frame preview
 - [ ] **Export / import save states** — download and upload `.auris` files
+- [ ] **Cloud saves synchronization** — sync battery saves and save states via Google Drive API
 
 ---
 
@@ -202,6 +203,16 @@ auris/
 - [ ] **PWA (Progressive Web App)** — install as a mobile app, works offline
 - [ ] **Service Worker** — asset caching for offline use
 - [ ] **Manifest** — icon, name, and splash screen for homescreen installation
+
+---
+
+### 🖥️ Desktop Application
+
+- [ ] **Electron wrapper** — package Auris as a native desktop app for macOS, Windows, and Linux
+- [ ] **Native file picker** — open ROMs via OS file dialog instead of drag & drop only
+- [ ] **Native menus** — menu bar with File, Emulation, and View options
+- [ ] **Auto-updater** — automatic updates via Electron's built-in update mechanism
+- [ ] **Distributable builds** — `.dmg` (macOS), `.exe` installer (Windows), `.AppImage` (Linux)
 
 ---
 
