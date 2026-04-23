@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NES Emulator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #e94560;
+            text-shadow: 0 0 20px #e94560;
+            letter-spacing: 4px;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        /* ── Canvas container ── */
+        .screen-wrap {
+            position: relative;
+            background: #000;
+            border: 3px solid #e94560;
+            border-radius: 4px;
+            box-shadow: 0 0 40px rgba(233,69,96,0.4), inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        #screen {
+            display: block;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            width: 512px;   /* 256 × 2 */
+            height: 480px;  /* 240 × 2 */
+        }
+
+        .screen-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.85);
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .screen-overlay.hidden { display: none; }
+
+        .overlay-icon { font-size: 4rem; }
+        .overlay-title { font-size: 1.4rem; color: #e94560; }
+        .overlay-sub   { font-size: 0.85rem; color: #888; text-align: center; max-width: 300px; }
+
+        /* ── Status bar ── */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 518px;
+            padding: 6px 4px;
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .fps-counter { color: #4CAF50; font-weight: bold; }
+        #controller-status { color: #888; font-style: italic; }
+
+        /* ── Controls ── */
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            background: #16213e;
+            color: #e0e0e0;
+            border: 1px solid #e94560;
+            border-radius: 4px;
+            padding: 8px 18px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            letter-spacing: 1px;
+        }
+
+        button:hover  { background: #e94560; color: #fff; box-shadow: 0 0 10px rgba(233,69,96,0.5); }
+        button:active { transform: scale(0.97); }
+        button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .btn-primary { background: #e94560; color: #fff; }
+        .btn-primary:hover { background: #c73652; }
+
+        /* ── ROM loader ── */
+        .rom-area {
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-label {
+            display: inline-block;
+            background: #0f3460;
+            color: #e0e0e0;
+            border: 1px dashed #e94560;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.15s;
+        }
+        .file-label:hover { background: #1a4a80; }
+
+        input[type="file"] { display: none; }
+
+        #rom-name {
+            font-size: 0.8rem;
+            color: #4CAF50;
+            max-width: 240px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ── Key map panel ── */
+        .keymap {
+            margin-top: 20px;
+            background: #16213e;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 14px 20px;
+            width: 518px;
+        }
+
+        .keymap h3 {
+            font-size: 0.8rem;
+            color: #e94560;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .keymap-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 20px;
+        }
+
+        .keymap-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            padding: 3px 0;
+            border-bottom: 1px solid #1e2a4a;
+        }
+
+        .key-label {
+            color: #888;
+        }
+
+        kbd {
+            background: #0f3460;
+            color: #e0e0e0;
+            border: 1px solid #334;
+            border-radius: 3px;
+            padding: 1px 6px;
+            font-family: inherit;
+            font-size: 0.7rem;
+        }
+
+        /* ── Drag & Drop ── */
+        body.drag-over .screen-wrap {
+            border-color: #4CAF50;
+            box-shadow: 0 0 40px rgba(76,175,80,0.4);
+        }
+
+        /* ── Mensagens ── */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e94560;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .toast.show { opacity: 1; }
+    </style>
+</head>
+<body>
+    <h1>⬛ NES</h1>
+    <div class="subtitle">EMULATOR · JS · macOS</div>
+
+    <!-- ── Tela principal ── -->
+    <div class="screen-wrap" id="screen-wrap">
+        <canvas id="screen" width="256" height="240"></canvas>
+        <div class="screen-overlay" id="overlay">
+            <div class="overlay-icon">🎮</div>
+            <div class="overlay-title">Carregar ROM</div>
+            <div class="overlay-sub">Arraste um arquivo .nes para cá ou use o botão abaixo</div>
+        </div>
+    </div>
+
+    <!-- ── Status ── -->
+    <div class="status-bar">
+        <span class="fps-counter" id="fps">FPS: —</span>
+        <span id="controller-status">Nenhum controle detectado</span>
+        <span id="rom-info">—</span>
+    </div>
+
+    <!-- ── Botões de controle ── -->
+    <div class="controls">
+        <label class="file-label" for="rom-file">📁 Carregar ROM</label>
+        <input type="file" id="rom-file" accept=".nes">
+        <button id="btn-pause" disabled>⏸ Pausar</button>
+        <button id="btn-reset" disabled>↺ Reset</button>
+        <button id="btn-fullscreen">⛶ Tela Cheia</button>
+        <button id="btn-scale" title="Alterna escala 2x/3x">🔍 2x</button>
+    </div>
+
+    <div class="rom-area">
+        <span id="rom-name">Nenhuma ROM carregada</span>
+    </div>
+
+    <!-- ── Mapeamento de teclas ── -->
+    <div class="keymap">
+        <h3>⌨️ Controles</h3>
+        <div class="keymap-grid">
+            <div>
+                <div class="keymap-row">
+                    <span class="key-label">D-Pad</span>
+                    <span><kbd>↑↓←→</kbd> ou <kbd>WASD</kbd></span>
+                </div>
+                <div class="keymap-row">
+                    <span class="key-label">Botão A</span>
+                    <span><kbd>Z</kbd></span>
+                </div>
+                <div class="keymap-row">
+                    <span class="key-label">Botão B</span>
+                    <span><kbd>X</kbd></span>
+                </div>
+                <div class="keymap-row">
+                    <span class="key-label">Start</span>
+                    <span><kbd>Enter</kbd></span>
+                </div>
+                <div class="keymap-row">
+                    <span class="key-label">Select</span>
+                    <span><kbd>Shift ⇧</kbd></span>
+                </div>
+            </div>
+            <div>
+                <div class="keymap-row">
+                    <span class="key-label">🎮 Xbox A</span>
+                    <span>NES A</span>
+                </div>
+                <div class="keymap-row">
+                    <span class="key-label">🎮 Xbox B</span>
+                    <span>NES B</span>
+                </div>
+                <div class="keymap-row">
+                    <span class="key-label">🎮 Start</span>
+                    <span>NES Start</span>
+                </div>
+                <div class="keymap-row">
+                    <span class="key-label">🎮 Back</span>
+                    <span>NES Select</span>
+                </div>
+                <div class="keymap-row">
+                    <span class="key-label">🎮 D-Pad</span>
+                    <span>Movimento</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <!-- ── Scripts ── -->
+    <script src="src/rom.js"></script>
+    <script src="src/cpu.js"></script>
+    <script src="src/ppu.js"></script>
+    <script src="src/apu.js"></script>
+    <script src="src/input.js"></script>
+    <script src="src/memory.js"></script>
+    <script src="src/nes.js"></script>
+
+    <script>
+    // ── Inicialização ─────────────────────────────────────────────────────────
+
+    const canvas    = document.getElementById('screen');
+    const overlay   = document.getElementById('overlay');
+    const fpsEl     = document.getElementById('fps');
+    const ctrlEl    = document.getElementById('controller-status');
+    const romNameEl = document.getElementById('rom-name');
+    const romInfoEl = document.getElementById('rom-info');
+    const btnPause  = document.getElementById('btn-pause');
+    const btnReset  = document.getElementById('btn-reset');
+    const btnFs     = document.getElementById('btn-fullscreen');
+    const btnScale  = document.getElementById('btn-scale');
+    const romFile   = document.getElementById('rom-file');
+    const toast     = document.getElementById('toast');
+
+    let nes    = null;
+    let scale  = 2;
+
+    function setScale(s) {
+        scale = s;
+        canvas.style.width  = `${256 * scale}px`;
+        canvas.style.height = `${240 * scale}px`;
+        btnScale.textContent = `🔍 ${scale}x`;
+    }
+    setScale(2);
+
+    // ── Toast ─────────────────────────────────────────────────────────────────
+
+    function showToast(msg, duration = 2500) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), duration);
+    }
+
+    // ── Carregamento de ROM ───────────────────────────────────────────────────
+
+    function loadROM(buffer, filename) {
+        try {
+            if (!nes) {
+                nes = new NES(canvas);
+                nes.onFPS = (fps) => {
+                    fpsEl.textContent = `FPS: ${fps}`;
+                };
+            } else {
+                nes.stop();
+            }
+
+            nes.loadROM(buffer);
+
+            const rom = nes.rom;
+            overlay.classList.add('hidden');
+
+            romNameEl.textContent = filename;
+            romInfoEl.textContent = `PRG: ${rom.prgBanks}×16KB | CHR: ${rom.chrBanks}×8KB | Mapper: ${rom.mapper}`;
+
+            btnPause.disabled = false;
+            btnReset.disabled = false;
+            btnPause.textContent = '⏸ Pausar';
+
+            nes.start();
+            showToast(`✅ ${filename} carregado!`);
+
+        } catch (err) {
+            showToast(`❌ Erro: ${err.message}`, 4000);
+            console.error(err);
+        }
+    }
+
+    // ── Eventos de arquivo ────────────────────────────────────────────────────
+
+    romFile.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => loadROM(ev.target.result, file.name);
+        reader.readAsArrayBuffer(file);
+        e.target.value = ''; // reset para permitir carregar o mesmo arquivo
+    });
+
+    // ── Drag & Drop ───────────────────────────────────────────────────────────
+
+    document.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        document.body.classList.add('drag-over');
+    });
+    document.addEventListener('dragleave', () => document.body.classList.remove('drag-over'));
+    document.addEventListener('drop', (e) => {
+        e.preventDefault();
+        document.body.classList.remove('drag-over');
+        const file = e.dataTransfer.files[0];
+        if (!file || !file.name.endsWith('.nes')) {
+            showToast('⚠️ Apenas arquivos .nes são suportados');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = (ev) => loadROM(ev.target.result, file.name);
+        reader.readAsArrayBuffer(file);
+    });
+
+    // ── Botões ────────────────────────────────────────────────────────────────
+
+    btnPause.addEventListener('click', () => {
+        if (!nes) return;
+        nes.pause();
+        btnPause.textContent = nes.paused ? '▶ Continuar' : '⏸ Pausar';
+    });
+
+    btnReset.addEventListener('click', () => {
+        if (!nes) return;
+        nes.stop();
+        nes.reset();
+        nes.start();
+        btnPause.textContent = '⏸ Pausar';
+        showToast('↺ Reset!');
+    });
+
+    btnFs.addEventListener('click', () => {
+        const el = document.getElementById('screen-wrap');
+        if (!document.fullscreenElement) {
+            el.requestFullscreen().catch(console.error);
+        } else {
+            document.exitFullscreen();
+        }
+    });
+
+    btnScale.addEventListener('click', () => {
+        setScale(scale === 2 ? 3 : 2);
+    });
+
+    // ── Detecção de gamepad ───────────────────────────────────────────────────
+
+    setInterval(() => {
+        const gps = navigator.getGamepads ? navigator.getGamepads() : [];
+        let connected = [];
+        for (const gp of gps) {
+            if (gp) connected.push(gp.id.substring(0, 30));
+        }
+        ctrlEl.textContent = connected.length > 0
+            ? `🎮 ${connected[0]}`
+            : 'Sem controle — use o teclado';
+    }, 2000);
+
+    // ── Fullscreen canvas scaling ─────────────────────────────────────────────
+
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement) {
+            canvas.style.width  = '100vw';
+            canvas.style.height = '100vh';
+            canvas.style.objectFit = 'contain';
+        } else {
+            setScale(scale);
+        }
+    });
+
+    // ── Atalhos de teclado globais ────────────────────────────────────────────
+
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Escape' && nes) {
+            nes.pause();
+            btnPause.textContent = nes.paused ? '▶ Continuar' : '⏸ Pausar';
+        }
+        if (e.code === 'F5' && nes) {
+            e.preventDefault();
+            nes.stop(); nes.reset(); nes.start();
+        }
+    });
+
+    console.log('[NES Emulator] Pronto. Carregue uma ROM .nes para começar!');
+    </script>
+</body>
+</html>
