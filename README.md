@@ -147,11 +147,92 @@ auris/
 
 ## Roadmap
 
-- [ ] APU — audio (Web Audio API, all 5 channels)
-- [ ] Save states
-- [ ] More mappers (5/MMC5, VRC6, FME-7)
-- [ ] Rewind
-- [ ] Touch controls (mobile)
+### ✅ Implementado
+
+- [x] **CPU 6502 completa** — todos os opcodes oficiais e ilegais usados por jogos reais
+- [x] **PPU** — background, sprites 8×8 e 8×16, scroll fino (registradores Loopy), NMI
+- [x] **Mapper 0 (NROM)** — Super Mario Bros., Donkey Kong, Pac-Man
+- [x] **Mapper 1 (MMC1)** — Mega Man 2, Metroid, Zelda
+- [x] **Mapper 2 (UxROM)** — Castlevania, Contra, DuckTales
+- [x] **Mapper 3 (CNROM)** — Arkanoid, Gradius
+- [x] **Mapper 4 (MMC3)** — Super Mario Bros. 3, Mega Man 3–6, Kirby
+- [x] **MMC3 IRQ** — troca de banco de CHR no meio do frame (barra de status)
+- [x] **OAM DMA** — transferência de sprites ($4014)
+- [x] **Controle Xbox / XInput** — via Web Gamepad API, USB e Bluetooth
+- [x] **Controle por teclado** — com mapeamento configurável
+- [x] **Drag & drop de ROMs** — arraste direto na janela
+- [x] **Escala 2× / 3×** — pixel-perfect
+- [x] **60 FPS** — loop via `requestAnimationFrame`
+- [x] **Detecção de gamepad** — status exibido na UI
+
+---
+
+### 🔧 Correções visuais pendentes
+
+- [ ] **Glitch de scroll horizontal** — artefatos ocasionais ao cruzar fronteira de nametable em alguns jogos
+- [ ] **Sprite overflow** — comportamento exato do flag quando mais de 8 sprites por scanline
+- [ ] **Sprite 0 hit** — refinamento do timing para efeitos de split-screen mais precisos
+- [ ] **PPU open bus** — leituras de registradores não implementados retornam lixo do barramento
+
+---
+
+### 🔊 Áudio
+
+- [ ] **APU — Pulse 1 e Pulse 2** — os dois canais de onda quadrada (melodias principais)
+- [ ] **APU — Triangle** — canal de onda triangular (baixo, efeitos)
+- [ ] **APU — Noise** — canal de ruído (percussão, explosões)
+- [ ] **APU — DMC** — canal de amostras digitais (vozes, samples)
+- [ ] **APU — Frame counter IRQ** — timing interno do APU
+
+---
+
+### 💾 Salvamento
+
+- [ ] **Battery saves (SRAM)** — salvar progresso em jogos com bateria (Zelda, Metroid) via `localStorage`
+- [ ] **Save states** — snapshot completo do estado da máquina a qualquer momento
+- [ ] **Múltiplos slots de save state** — slots 1–9 com preview do frame
+- [ ] **Export / import de save states** — download e upload de arquivos `.auris`
+
+---
+
+### 📱 Mobile e PWA
+
+- [ ] **Controles touch** — D-pad e botões na tela para celular e tablet
+- [ ] **Layout responsivo** — adapta canvas e UI para telas pequenas
+- [ ] **PWA (Progressive Web App)** — instalar como app no celular, funcionar offline
+- [ ] **Service Worker** — cache de assets para uso sem internet
+- [ ] **Manifest** — ícone, nome e splash screen ao instalar no homescreen
+
+---
+
+### 🎮 Gameplay
+
+- [ ] **Botões turbo** — A e B com auto-fire configurável
+- [ ] **Rewind** — voltar no tempo (ringbuffer de estados)
+- [ ] **Ajuste de velocidade** — 0.5× / 1× / 2× / 4×
+- [ ] **Modo tela cheia real** — canvas ocupa 100% sem barra do browser
+- [ ] **Remapeamento de controles** — UI para trocar qualquer botão
+
+---
+
+### 🗂️ Mappers
+
+- [ ] **Mapper 5 (MMC5)** — Castlevania III, Just Breed (o mais complexo)
+- [ ] **Mapper 7 (AxROM)** — Battletoads, Marble Madness
+- [ ] **Mapper 9 (MMC2)** — Mike Tyson's Punch-Out!!
+- [ ] **Mapper 19 (Namco 163)** — Megami Tensei II, Battle City
+- [ ] **Mapper 21/23/25 (VRC2/4)** — jogos Konami avançados
+- [ ] **Mapper 24/26 (VRC6)** — Akumajou Densetsu, Esper Dream 2
+- [ ] **Mapper 69 (FME-7/Sunsoft 5B)** — Batman Return of the Joker
+
+---
+
+### 🛠️ Developer
+
+- [ ] **Debugger de CPU** — step, breakpoints, visualização de registradores
+- [ ] **Visualizador de PPU** — nametables, pattern tables e paletas em tempo real
+- [ ] **Game Genie** — suporte a cheats no formato clássico
+- [ ] **Netlify / Vercel deploy** — hospedar como webapp pública sem instalar nada
 
 ---
 
