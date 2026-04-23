@@ -1,6 +1,6 @@
 # 🐚 Auris — NES Emulator
 
-> *Auris* is Latin for "ear" — the same root as *audio*. Named after the ear-shaped shell,  
+> _Auris_ is Latin for "ear" — the same root as _audio_. Named after the ear-shaped shell,  
 > built by someone whose nickname is Shell. It listens to your commands.
 
 A cycle-accurate NES emulator written in **pure JavaScript + HTML**.  
@@ -50,40 +50,40 @@ npx live-server .
 
 ### Keyboard
 
-| Key | NES Button |
-|-----|-----------|
-| `↑ ↓ ← →` or `W A S D` | D-Pad |
-| `Z` | A |
-| `X` | B |
-| `Enter` | Start |
-| `Shift` (right) | Select |
-| `Esc` | Pause |
-| `F5` | Reset |
+| Key                    | NES Button |
+| ---------------------- | ---------- |
+| `↑ ↓ ← →` or `W A S D` | D-Pad      |
+| `Z`                    | A          |
+| `X`                    | B          |
+| `Enter`                | Start      |
+| `Shift` (right)        | Select     |
+| `Esc`                  | Pause      |
+| `F5`                   | Reset      |
 
 ### Xbox / XInput Controller
 
 Connect via USB or Bluetooth — detected automatically.
 
-| Button | NES Button |
-|--------|-----------|
-| A | A |
-| B | B |
-| D-Pad | D-Pad |
-| Left stick | D-Pad |
-| Start | Start |
-| Back / Select | Select |
+| Button        | NES Button |
+| ------------- | ---------- |
+| A             | A          |
+| B             | B          |
+| D-Pad         | D-Pad      |
+| Left stick    | D-Pad      |
+| Start         | Start      |
+| Back / Select | Select     |
 
 ---
 
 ## Supported Mappers
 
-| Mapper | Name | Notable Games |
-|--------|------|---------------|
-| 0 — NROM | No mapper | Donkey Kong, Pac-Man, Super Mario Bros. |
-| 1 — MMC1 | Nintendo MMC1 | Mega Man 2, Metroid, The Legend of Zelda |
-| 2 — UxROM | Konami/etc | Castlevania, Contra, DuckTales |
-| 3 — CNROM | Coleco/etc | Arkanoid, Gradius |
-| 4 — MMC3 | Nintendo MMC3 | **Super Mario Bros. 3**, Mega Man 3-6, Kirby |
+| Mapper    | Name          | Notable Games                                |
+| --------- | ------------- | -------------------------------------------- |
+| 0 — NROM  | No mapper     | Donkey Kong, Pac-Man, Super Mario Bros.      |
+| 1 — MMC1  | Nintendo MMC1 | Mega Man 2, Metroid, The Legend of Zelda     |
+| 2 — UxROM | Konami/etc    | Castlevania, Contra, DuckTales               |
+| 3 — CNROM | Coleco/etc    | Arkanoid, Gradius                            |
+| 4 — MMC3  | Nintendo MMC3 | **Super Mario Bros. 3**, Mega Man 3-6, Kirby |
 
 Most classic NES games fall into these five mappers.  
 More complex mappers (5/FME-7/VRC6) are planned for future updates.
@@ -120,7 +120,7 @@ auris/
 
 **Auris is 100% legal to use, distribute, and publish.**
 
-- Emulators are explicitly legal. This was established by U.S. federal courts in *Sony Computer Entertainment v. Connectix Corp.* (9th Cir. 2000) and the *Bleem!* case. The courts ruled that creating a compatible emulator via clean-room implementation does not infringe copyright.
+- Emulators are explicitly legal. This was established by U.S. federal courts in _Sony Computer Entertainment v. Connectix Corp._ (9th Cir. 2000) and the _Bleem!_ case. The courts ruled that creating a compatible emulator via clean-room implementation does not infringe copyright.
 - The NES hardware was released in 1983. All relevant hardware patents have long since expired (patents last 20 years in most jurisdictions).
 - Auris contains **zero lines of Nintendo's code**. It was written entirely from scratch using publicly available NES hardware documentation (nesdev.org).
 - The Web Gamepad API, Canvas API, and Web Audio API are open web standards.
@@ -135,93 +135,93 @@ auris/
 
 ### Summary
 
-| What | Legal? |
-|------|--------|
-| Publishing Auris on GitHub | ✅ Yes |
-| Distributing Auris | ✅ Yes |
-| Using Auris with ROMs you created | ✅ Yes |
-| Using Auris with commercial ROMs | ⚠️ Depends on your local laws and ROM source |
-| Including ROMs in this repo | ❌ No |
+| What                              | Legal?                                       |
+| --------------------------------- | -------------------------------------------- |
+| Publishing Auris on GitHub        | ✅ Yes                                       |
+| Distributing Auris                | ✅ Yes                                       |
+| Using Auris with ROMs you created | ✅ Yes                                       |
+| Using Auris with commercial ROMs  | ⚠️ Depends on your local laws and ROM source |
+| Including ROMs in this repo       | ❌ No                                        |
 
 ---
 
 ## Roadmap
 
-### ✅ Implementado
+### ✅ Implemented
 
-- [x] **CPU 6502 completa** — todos os opcodes oficiais e ilegais usados por jogos reais
-- [x] **PPU** — background, sprites 8×8 e 8×16, scroll fino (registradores Loopy), NMI
+- [x] **Full 6502 CPU** — all official and illegal opcodes used by real games
+- [x] **PPU** — background, 8×8 and 8×16 sprites, fine scroll (Loopy registers), NMI
 - [x] **Mapper 0 (NROM)** — Super Mario Bros., Donkey Kong, Pac-Man
 - [x] **Mapper 1 (MMC1)** — Mega Man 2, Metroid, Zelda
 - [x] **Mapper 2 (UxROM)** — Castlevania, Contra, DuckTales
 - [x] **Mapper 3 (CNROM)** — Arkanoid, Gradius
 - [x] **Mapper 4 (MMC3)** — Super Mario Bros. 3, Mega Man 3–6, Kirby
-- [x] **MMC3 IRQ** — troca de banco de CHR no meio do frame (barra de status)
-- [x] **OAM DMA** — transferência de sprites ($4014)
-- [x] **Controle Xbox / XInput** — via Web Gamepad API, USB e Bluetooth
-- [x] **Controle por teclado** — com mapeamento configurável
-- [x] **Drag & drop de ROMs** — arraste direto na janela
-- [x] **Escala 2× / 3×** — pixel-perfect
+- [x] **MMC3 IRQ** — mid-frame CHR bank switching (status bar)
+- [x] **OAM DMA** — sprite data transfer ($4014)
+- [x] **Xbox / XInput Controller** — via Web Gamepad API, USB and Bluetooth
+- [x] **Keyboard Controls** — with configurable mapping
+- [x] **ROM Drag & Drop** — drop directly into the window
+- [x] **2× / 3× Scaling** — pixel-perfect
 - [x] **60 FPS** — loop via `requestAnimationFrame`
-- [x] **Detecção de gamepad** — status exibido na UI
+- [x] **Gamepad Detection** — status displayed in the UI
 
 ---
 
-### 🔧 Correções visuais pendentes
+### 🔧 Pending Visual Fixes
 
-- [ ] **Glitch de scroll horizontal** — artefatos ocasionais ao cruzar fronteira de nametable em alguns jogos
-- [ ] **Sprite overflow** — comportamento exato do flag quando mais de 8 sprites por scanline
-- [ ] **Sprite 0 hit** — refinamento do timing para efeitos de split-screen mais precisos
-- [ ] **PPU open bus** — leituras de registradores não implementados retornam lixo do barramento
-
----
-
-### 🔊 Áudio
-
-- [ ] **APU — Pulse 1 e Pulse 2** — os dois canais de onda quadrada (melodias principais)
-- [ ] **APU — Triangle** — canal de onda triangular (baixo, efeitos)
-- [ ] **APU — Noise** — canal de ruído (percussão, explosões)
-- [ ] **APU — DMC** — canal de amostras digitais (vozes, samples)
-- [ ] **APU — Frame counter IRQ** — timing interno do APU
+- [ ] **Horizontal scroll glitch** — occasional artifacts when crossing nametable boundaries in some games
+- [ ] **Sprite overflow** — exact flag behavior when more than 8 sprites per scanline
+- [ ] **Sprite 0 hit** — timing refinement for more precise split-screen effects
+- [ ] **PPU open bus** — reads from unimplemented registers return bus noise
 
 ---
 
-### 💾 Salvamento
+### 🔊 Audio
 
-- [ ] **Battery saves (SRAM)** — salvar progresso em jogos com bateria (Zelda, Metroid) via `localStorage`
-- [ ] **Save states** — snapshot completo do estado da máquina a qualquer momento
-- [ ] **Múltiplos slots de save state** — slots 1–9 com preview do frame
-- [ ] **Export / import de save states** — download e upload de arquivos `.auris`
+- [ ] **APU — Pulse 1 and Pulse 2** — the two square wave channels (main melodies)
+- [ ] **APU — Triangle** — triangle wave channel (bass, effects)
+- [ ] **APU — Noise** — noise channel (percussion, explosions)
+- [ ] **APU — DMC** — digital sample channel (voices, samples)
+- [ ] **APU — Frame counter IRQ** — internal APU timing
 
 ---
 
-### 📱 Mobile e PWA
+### 💾 Saving
 
-- [ ] **Controles touch** — D-pad e botões na tela para celular e tablet
-- [ ] **Layout responsivo** — adapta canvas e UI para telas pequenas
-- [ ] **PWA (Progressive Web App)** — instalar como app no celular, funcionar offline
-- [ ] **Service Worker** — cache de assets para uso sem internet
-- [ ] **Manifest** — ícone, nome e splash screen ao instalar no homescreen
+- [ ] **Battery saves (SRAM)** — save progress in battery-backed games (Zelda, Metroid) via `localStorage`
+- [ ] **Save states** — full snapshot of the machine state at any time
+- [ ] **Multiple save state slots** — slots 1–9 with frame preview
+- [ ] **Export / import save states** — download and upload `.auris` files
+
+---
+
+### 📱 Mobile and PWA
+
+- [ ] **Touch controls** — On-screen D-pad and buttons for mobile and tablet
+- [ ] **Responsive layout** — adapts canvas and UI for small screens
+- [ ] **PWA (Progressive Web App)** — install as a mobile app, works offline
+- [ ] **Service Worker** — asset caching for offline use
+- [ ] **Manifest** — icon, name, and splash screen for homescreen installation
 
 ---
 
 ### 🎮 Gameplay
 
-- [ ] **Botões turbo** — A e B com auto-fire configurável
-- [ ] **Rewind** — voltar no tempo (ringbuffer de estados)
-- [ ] **Ajuste de velocidade** — 0.5× / 1× / 2× / 4×
-- [ ] **Modo tela cheia real** — canvas ocupa 100% sem barra do browser
-- [ ] **Remapeamento de controles** — UI para trocar qualquer botão
+- [ ] **Turbo buttons** — A and B with configurable auto-fire
+- [ ] **Rewind** — go back in time (state ringbuffer)
+- [ ] **Speed adjustment** — 0.5× / 1× / 2× / 4×
+- [ ] **True fullscreen mode** — canvas occupies 100% without browser bars
+- [ ] **Control remapping** — UI to change any button
 
 ---
 
 ### 🗂️ Mappers
 
-- [ ] **Mapper 5 (MMC5)** — Castlevania III, Just Breed (o mais complexo)
+- [ ] **Mapper 5 (MMC5)** — Castlevania III, Just Breed (the most complex)
 - [ ] **Mapper 7 (AxROM)** — Battletoads, Marble Madness
 - [ ] **Mapper 9 (MMC2)** — Mike Tyson's Punch-Out!!
 - [ ] **Mapper 19 (Namco 163)** — Megami Tensei II, Battle City
-- [ ] **Mapper 21/23/25 (VRC2/4)** — jogos Konami avançados
+- [ ] **Mapper 21/23/25 (VRC2/4)** — advanced Konami games
 - [ ] **Mapper 24/26 (VRC6)** — Akumajou Densetsu, Esper Dream 2
 - [ ] **Mapper 69 (FME-7/Sunsoft 5B)** — Batman Return of the Joker
 
@@ -229,10 +229,10 @@ auris/
 
 ### 🛠️ Developer
 
-- [ ] **Debugger de CPU** — step, breakpoints, visualização de registradores
-- [ ] **Visualizador de PPU** — nametables, pattern tables e paletas em tempo real
-- [ ] **Game Genie** — suporte a cheats no formato clássico
-- [ ] **Netlify / Vercel deploy** — hospedar como webapp pública sem instalar nada
+- [ ] **CPU Debugger** — step, breakpoints, register visualization
+- [ ] **PPU Viewer** — real-time nametables, pattern tables, and palettes
+- [ ] **Game Genie** — support for classic format cheats
+- [ ] **Netlify / Vercel deploy** — host as a public webapp without installation
 
 ---
 
@@ -264,5 +264,5 @@ SOFTWARE.
 
 ---
 
-*Named after the* Auris *shell — same family as the abalone, same shape as a human ear.*  
-*Shell + ear = something that listens. A fitting name for a terminal tool.*
+_Named after the_ Auris _shell — same family as the abalone, same shape as a human ear._  
+_Shell + ear = something that listens. A fitting name for a terminal tool._
