@@ -80,6 +80,9 @@
 
         .fps-counter { color: #4CAF50; font-weight: bold; }
         #controller-status { color: #888; font-style: italic; }
+        #audio-status { color: #aaa; font-size: 0.72rem; }
+        #audio-status.active { color: #4CAF50; }
+        #audio-status.muted  { color: #e94560; }
 
         /* ── Controls ── */
         .controls {
@@ -229,6 +232,7 @@
     <!-- ── Status ── -->
     <div class="status-bar">
         <span class="fps-counter" id="fps">FPS: —</span>
+        <span id="audio-status">🔇 Áudio inativo</span>
         <span id="controller-status">Nenhum controle detectado</span>
         <span id="rom-info">—</span>
     </div>
@@ -239,6 +243,7 @@
         <input type="file" id="rom-file" accept=".nes">
         <button id="btn-pause" disabled>⏸ Pausar</button>
         <button id="btn-reset" disabled>↺ Reset</button>
+        <button id="btn-mute" disabled title="Mudo / Som">🔊 Som</button>
         <button id="btn-fullscreen">⛶ Tela Cheia</button>
         <button id="btn-scale" title="Alterna escala 2x/3x">🔍 2x</button>
     </div>
@@ -320,13 +325,29 @@
     const romInfoEl = document.getElementById('rom-info');
     const btnPause  = document.getElementById('btn-pause');
     const btnReset  = document.getElementById('btn-reset');
+    const btnMute   = document.getElementById('btn-mute');
     const btnFs     = document.getElementById('btn-fullscreen');
     const btnScale  = document.getElementById('btn-scale');
     const romFile   = document.getElementById('rom-file');
     const toast     = document.getElementById('toast');
+    const audioEl   = document.getElementById('audio-status');
 
     let nes    = null;
     let scale  = 2;
+    let muted  = false;
+
+    function setAudioStatus(active, isMuted) {
+        if (!active) {
+            audioEl.textContent = '🔇 Áudio inativo';
+            audioEl.className   = '';
+        } else if (isMuted) {
+            audioEl.textContent = '🔇 Mudo';
+            audioEl.className   = 'muted';
+        } else {
+            audioEl.textContent = '🔊 Áudio ativo';
+            audioEl.className   = 'active';
+        }
+    }
 
     function setScale(s) {
         scale = s;
@@ -359,6 +380,10 @@
 
             nes.loadROM(buffer);
 
+            // Inicializa áudio na primeira interação (requisito dos browsers)
+            nes.initAudio();
+            setAudioStatus(true, muted);
+
             const rom = nes.rom;
             overlay.classList.add('hidden');
 
@@ -367,6 +392,7 @@
 
             btnPause.disabled = false;
             btnReset.disabled = false;
+            btnMute.disabled  = false;
             btnPause.textContent = '⏸ Pausar';
 
             nes.start();
@@ -426,6 +452,14 @@
         showToast('↺ Reset!');
     });
 
+    btnMute.addEventListener('click', () => {
+        if (!nes) return;
+        muted = !muted;
+        nes.setMute(muted);
+        btnMute.textContent = muted ? '🔇 Mudo' : '🔊 Som';
+        setAudioStatus(true, muted);
+    });
+
     btnFs.addEventListener('click', () => {
         const el = document.getElementById('screen-wrap');
         if (!document.fullscreenElement) {
@@ -474,6 +508,12 @@
         if (e.code === 'F5' && nes) {
             e.preventDefault();
             nes.stop(); nes.reset(); nes.start();
+        }
+        if (e.code === 'KeyM' && nes) {
+            muted = !muted;
+            nes.setMute(muted);
+            btnMute.textContent = muted ? '🔇 Mudo' : '🔊 Som';
+            setAudioStatus(true, muted);
         }
     });
 

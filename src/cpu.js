@@ -127,6 +127,11 @@ class CPU {
         this.cycles += 7;
     }
 
+    // Sinaliza IRQ pendente (usado pelo APU Frame Counter e DMC)
+    requestIRQ() {
+        this.irqPending = true;
+    }
+
     // ─── Loop principal: executa 1 instrução ──────────────────────────────────
 
     step() {

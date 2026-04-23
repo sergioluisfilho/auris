@@ -59,6 +59,7 @@ npx live-server .
 | `Shift` (right)        | Select     |
 | `Esc`                  | Pause      |
 | `F5`                   | Reset      |
+| `M`                    | Mudo/Som   |
 
 ### Xbox / XInput Controller
 
@@ -214,11 +215,11 @@ auris/
 
 ### 🔊 Audio
 
-- [ ] **APU — Pulse 1 and Pulse 2** — the two square wave channels (main melodies)
-- [ ] **APU — Triangle** — triangle wave channel (bass, effects)
-- [ ] **APU — Noise** — noise channel (percussion, explosions)
-- [ ] **APU — DMC** — digital sample channel (voices, samples)
-- [ ] **APU — Frame counter IRQ** — internal APU timing
+- [x] **APU — Pulse 1 and Pulse 2** — the two square wave channels (main melodies)
+- [x] **APU — Triangle** — triangle wave channel (bass, effects)
+- [x] **APU — Noise** — noise channel (percussion, explosions)
+- [x] **APU — DMC** — digital sample channel (voices, samples)
+- [x] **APU — Frame counter IRQ** — internal APU timing
 
 ---
 

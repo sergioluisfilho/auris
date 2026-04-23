@@ -32,6 +32,9 @@ class NES {
         // Conecta CPU ao barramento
         this.cpu.mem = this.mem;
 
+        // Conecta APU ao barramento de memória
+        this.apu.setMemReader((addr) => this.mem.read(addr));
+
         // Estado do emulador
         this.running     = false;
         this.paused      = false;
@@ -40,6 +43,9 @@ class NES {
         this._frameCount = 0;
         this._fpsTime    = 0;
         this._fps        = 0;
+
+        // AudioContext (criado na primeira interação do usuário)
+        this._audioCtx   = null;
 
         // Imagem do frame (256x240)
         this.imageData = this.ctx.createImageData(256, 240);
@@ -57,6 +63,10 @@ class NES {
     }
 
     reset() {
+        // Preserva contexto de áudio entre resets
+        const savedCtx    = this._audioCtx;
+        const savedReader = this.apu ? (this.apu.dmc ? this.apu.dmc.readMem : null) : null;
+
         this.ppu  = new PPU(this);
         this.apu  = new APU(this);
         this.cpu  = new CPU();
@@ -65,7 +75,28 @@ class NES {
         this.prgRAM.fill(0);
         this.cpu.reset();
         this.imageData = this.ctx.createImageData(256, 240);
+
+        // Reconecta APU
+        this.apu.setMemReader((addr) => this.mem.read(addr));
+        if (savedCtx) this.apu.init(savedCtx);
+
         console.log(`[NES] Reset — PC inicial: 0x${this.cpu.PC.toString(16).toUpperCase().padStart(4,'0')}`);
+    }
+
+    // Inicializa áudio (deve ser chamado após gesto do usuário)
+    initAudio() {
+        if (this._audioCtx) return;
+        try {
+            this._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            this.apu.init(this._audioCtx);
+            console.log('[NES] AudioContext iniciado — sample rate:', this._audioCtx.sampleRate);
+        } catch (e) {
+            console.warn('[NES] Web Audio API não disponível:', e);
+        }
+    }
+
+    setMute(muted) {
+        this.apu.setMute(muted);
     }
 
     // ─── Execução de um frame ─────────────────────────────────────────────────
