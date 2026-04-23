@@ -145,6 +145,42 @@ auris/
 
 ---
 
+## 🎮 Game Compatibility
+
+> This section lists ROMs that have been tested on Auris. Results reflect real gameplay sessions — not automated test suites.
+
+### Status Labels
+
+| Label | Meaning |
+| ----- | ------- |
+| ✅ **Playable** | Runs well from start to finish with no significant issues |
+| ⚠️ **Playable w/ Major Glitches** | Beatable but with notable graphical or gameplay bugs |
+| 🟡 **Partially Playable** | Boots and runs, but crashes or breaks at some point |
+| 🔴 **Broken** | Fails to boot or is unplayable |
+| 🔵 **Untested** | ROM not yet verified on this emulator |
+
+### Region Codes
+
+| Code | Region |
+| ---- | ------ |
+| `USA` | North America (NTSC) |
+| `EUR` | Europe (PAL) |
+| `JPN` | Japan (NTSC-J) |
+| `BRA` | Brazil / localized release |
+
+---
+
+### Tested ROMs
+
+| ROM | Code | Region | Mapper | Status | Tested by |
+| --- | ---- | ------ | ------ | ------ | --------- |
+| Super Mario Bros. 3 | `SMB3` | `USA` | MMC3 (4) | ⚠️ **Playable w/ Major Glitches** | [@sergioluisfilho](https://github.com/sergioluisfilho) |
+
+> **Notes:**
+> - **Super Mario Bros. 3 (USA)** — Boots and is playable. Known major graphical glitches present during gameplay (likely related to open PPU/scroll issues). Progressing through levels is possible.
+
+---
+
 ## Roadmap
 
 ### ✅ Implemented
